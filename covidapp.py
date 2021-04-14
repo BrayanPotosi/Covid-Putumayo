@@ -36,7 +36,6 @@ def get_positive_cases():
 
     for i in range(len(municipalities_list)):
         aux = len([patient for patient in data if patient["ciudad_municipio_nom"] == municipalities_list[i]])
-
         active_cases_list.append(aux)
 
     print_graph(active_cases_list, municipalities_list)
@@ -60,7 +59,7 @@ def print_graph(active_cases, municipalities_list):
     p.xaxis.major_label_orientation = 1
     p.xgrid.grid_line_color = None
     p.y_range.start = 0
-    p.y_range.end = max(active_cases) + 20
+    p.y_range.end = max(active_cases) + 30
 
     show(p)
 
