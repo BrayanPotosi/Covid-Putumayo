@@ -6,6 +6,8 @@ from bokeh.transform import factor_cmap
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from datetime import datetime
+import schedule
+import time
 import json
 
 app = Flask(__name__)
@@ -45,7 +47,7 @@ def get_positive_cases():
 
 def print_graph(active_cases, municipalities_list):
 
-    output_file("bar_colormapped.html")
+    output_file("Covid_map.html")
     color_list = ['#3288bd'] * len(municipalities_list)
     str_date = datetime.now().strftime('%d-%m-%Y')
 
@@ -66,8 +68,11 @@ def print_graph(active_cases, municipalities_list):
     show(p)
 
 
-get_positive_cases()
+schedule.every().day.at("12:01").do(get_positive_cases())
 
+while True:
+    schedule.run_pending()
+    time.sleep(1)
 
 @app.route('/')
 def hello_world():
