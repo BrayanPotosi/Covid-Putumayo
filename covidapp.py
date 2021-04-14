@@ -10,8 +10,10 @@ import json
 
 app = Flask(__name__)
 
+department_name = 'CAQUETA'
+
 url_base = 'https://www.datos.gov.co/resource/gt2j-8ykr.json?'
-param = 'departamento_nom=PUTUMAYO&recuperado=Activo&$limit=5000'
+param = f'departamento_nom={department_name}&recuperado=Activo&$limit=5000'
 url = url_base + param
 
 session = Session()
@@ -50,7 +52,7 @@ def print_graph(active_cases, municipalities_list):
     source = ColumnDataSource(data=dict(municipalities_list=municipalities_list, active_cases=active_cases))
 
     p = figure(x_range=municipalities_list, plot_height=500, plot_width=800, toolbar_location=None,
-               title=f"Casos activos de Covid-19 en Putumayo para la fecha : {str_date}")
+               title=f"Casos activos de Covid-19 en {department_name.capitalize()} para la fecha : {str_date}")
 
     p.vbar(x='municipalities_list', top='active_cases', width=0.9, source=source,
            line_color='white', fill_color=factor_cmap('municipalities_list',
