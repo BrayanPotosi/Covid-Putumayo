@@ -35,8 +35,8 @@ def get_positive_cases():
     active_cases_list = []
 
     for i in range(len(municipalities_list)):
-        aux = len([patient for patient in data if patient["ciudad_municipio_nom"] == municipalities_list[i]])
-        active_cases_list.append(aux)
+        cases_in_municipality = len([patient for patient in data if patient["ciudad_municipio_nom"] == municipalities_list[i]])
+        active_cases_list.append(cases_in_municipality)
 
     print_graph(active_cases_list, municipalities_list)
 
