@@ -7,10 +7,6 @@ from bokeh.layouts import row
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import datetime
-from flask_sqlalchemy import SQLAlchemy
-import numpy as np
-import schedule
-import time
 import json
 import mysql.connector
 
@@ -129,10 +125,3 @@ def print_local_graph():
 
     show(row(p, p1))
 
-
-print_local_graph()
-
-# schedule.every().day.at("12:00").do(get_positive_cases)
-#
-# while True:
-#     schedule.run_pending()
