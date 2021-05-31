@@ -122,7 +122,9 @@ def print_local_graph():
     print(x,y)
 
     p1 = figure(title="Grafica historica Putumayo", x_axis_label="Fecha", y_axis_label="Numero de casos",
-                plot_height=500, plot_width=450,)
+                plot_height=500, plot_width=450, x_range=x)
+
+    p1.xaxis.major_label_orientation = np.pi/4
 
     p1.line(x, y, legend_label="Casos.", line_width=2)
 
