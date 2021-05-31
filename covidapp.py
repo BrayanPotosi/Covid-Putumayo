@@ -51,7 +51,7 @@ def get_data_api(full_url):
 def get_positive_cases(full_url, data_return='cases_list'):
 
     data = get_data_api(full_url)
-    municipalities_list = list({name["ciudad_municipio_nom"] for name in data})
+    municipalities_list = sorted(list({name["ciudad_municipio_nom"] for name in data}))
     active_cases_list = []
 
     for i in range(len(municipalities_list)):
@@ -64,39 +64,35 @@ def get_positive_cases(full_url, data_return='cases_list'):
         return municipalities_list
 
 
-def save_registers_db(db):
+def perform_query_db(db, queries):
+
+    query = f"{queries}"
+    cursor = db.cursor()
+    cursor.execute(query)
+    result = cursor.fetchall()
+    db.commit()
+
+    return result
+
+
+def save_registers_db():
 
     active_cases_list = get_positive_cases(full_url, data_return='cases_list')
     total_cases = sum(active_cases_list)
-    cursor = db.cursor()
 
     try:
-        cursor.execute(f"INSERT INTO cases (date_casesx, numbercases) VALUES ('{str_date}', {total_cases})")
-        db.commit()
+        perform_query_db(database, f"INSERT INTO cases (date_casesx, numbercases) VALUES ('{str_date}', {total_cases})")
     except:
         print('\nError: El registro de hoy ya fue completado')
-
-
-def get_registers_db(db):
-
-    query = f"SELECT date_casesx FROM cases; SELECT numbercases FROM cases"
-
-    cursor = db.cursor()
-
-    cursor.execute(query, multi=True)
-
-    total_dates = cursor.fetchall()
-
-    db.commit()
-
-    print(total_dates)
 
 
 def print_local_graph():
 
     active_cases_list = get_positive_cases(full_url, data_return='cases_list')
     municipalities_list = get_positive_cases(full_url, data_return='municipalities_list')
-    save_registers_db(database)
+    dates = perform_query_db(database, 'SELECT date_casesx FROM cases')
+    total_cases = perform_query_db(database, 'SELECT numbercases FROM cases')
+    save_registers_db()
 
     output_file("./templates/Covid_map.html")
     color_list = ['#3288bd'] * len(municipalities_list)
@@ -114,9 +110,16 @@ def print_local_graph():
     p.y_range.start = 0
     p.y_range.end = max(active_cases_list) + 30
 
-    total_cases_department = sum(active_cases_list)
-    x = [1, 2, 3, 4, 5, 6, 7, *range(8, 90)]
-    y = [total_cases_department, 100, 150, 70, 44, 120, 300, *range(90, 172)]
+    x = []
+    y = []
+
+    for element in dates:
+        x.append(element[0])
+
+    for element in total_cases:
+        y.append(element[0])
+
+    print(x,y)
 
     p1 = figure(title="Grafica historica Putumayo", x_axis_label="Fecha", y_axis_label="Numero de casos",
                 plot_height=500, plot_width=450,)
@@ -126,7 +129,8 @@ def print_local_graph():
     show(row(p, p1))
 
 
-get_registers_db(database)
+print_local_graph()
+
 # schedule.every().day.at("12:00").do(get_positive_cases)
 #
 # while True:
