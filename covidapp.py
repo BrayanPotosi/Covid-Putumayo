@@ -28,8 +28,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def show_map_covid():
-    get_positive_cases()
-    return render_template('Covid_map.html')
+    print_local_graph()
+    return render_template('./Covid_map.html')
 
 
 def get_data_api(full_url):
@@ -86,8 +86,8 @@ def print_local_graph():
 
     active_cases_list = get_positive_cases(full_url, data_return='cases_list')
     municipalities_list = get_positive_cases(full_url, data_return='municipalities_list')
-    dates = perform_query_db(database, 'SELECT date_casesx FROM cases')
-    total_cases = perform_query_db(database, 'SELECT numbercases FROM cases')
+    dates = perform_query_db(database, 'SELECT date_casesx FROM cases ORDER BY id ASC')
+    total_cases = perform_query_db(database, 'SELECT numbercases FROM cases ORDER BY id ASC')
     save_registers_db()
 
     output_file("./templates/Covid_map.html")
