@@ -79,9 +79,6 @@ def get_total_cases_per_city(url=full_url):
         cases_in_city = len([patient for patient in data if patient["ciudad_municipio_nom"] == cities_list[i]])
         active_cases_list.append(cases_in_city)
 
-    # active_cases_list = [patient for index, patient in enumerate(data) if
-    #                      patient["ciudad_municipio_nom"] == cities_list[index] if index in range(len(cities_list))]
-
     return active_cases_list
 
 
