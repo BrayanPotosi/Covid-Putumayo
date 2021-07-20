@@ -34,10 +34,10 @@ def show_map():
 
 # Database connector
 database = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    passwd='toor',
-    database='covid'
+    host='',
+    user='',
+    passwd='',
+    database=''
 )
 
 # Endpoint variables
